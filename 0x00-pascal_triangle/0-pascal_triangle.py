@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 0-pascal_triangle: This module provides a function to generate
     Pascal's Triangle based on input
