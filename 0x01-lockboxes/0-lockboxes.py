@@ -12,10 +12,12 @@ def canUnlockAll(boxes):
                  checkList.append(box)#checks each box inside the boxes
             for number in box:
                 if boxes[number]:#unlocks a box
-                    if not boxes[number] in checkList:
-                            checkList.append(boxes[number])
+                    for item in boxes[number]:
+                        if item != number:
+                            if not boxes[number] in checkList:
+                                checkList.append(boxes[number])
 
-    # print("checklist: ", checkList, '\nBoxes: ', boxes)
+    print("checklist: ", checkList, '\nBoxes: ', boxes)
     if len(checkList) == len(boxes):
         return True
     return False
