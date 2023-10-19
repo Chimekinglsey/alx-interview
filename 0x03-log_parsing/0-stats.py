@@ -42,9 +42,6 @@ def log_parse():
             for key, val in status_code_dict.items():
                 if val > 0:
                     print(f"{key}, {val}")
-            print(err)
         
-        except BrokenPipeError as err:
-            pass
 if __name__ == '__main__':
     log_parse()
