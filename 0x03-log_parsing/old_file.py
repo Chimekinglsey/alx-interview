@@ -2,7 +2,6 @@
 """log parsing"""
 import sys
 import re
-from time import sleep
 
 
 def match(x: str) -> bool:
@@ -24,7 +23,6 @@ def log_parse() -> None:
         status_codes = [200, 301, 400, 401, 403, 404, 405, 500]
         status_code_dict = {'200': 0, '301': 0, '400': 0, '401': 0,
                             '403': 0, '404': 0, '405': 0, '500': 0}
-        # sorted_s_code = sorted(status_code_dict)
         try:
             for line in sys.stdin:
                 if match(line):
@@ -52,5 +50,5 @@ def log_parse() -> None:
             exit(1)
 
 
-# if __name__ == '__main__':
-log_parse()
+if __name__ == '__main__':
+    log_parse()
