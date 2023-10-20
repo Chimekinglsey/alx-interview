@@ -25,7 +25,7 @@ def log_parse() -> None:
         for line in sys.stdin:
             if not match(line):
                 continue  # Skip lines that don't match the format
-            
+
             a, b, c, d, e, f, g, status_code, f_size = line.split()
             total_f_size += int(f_size)
 
