@@ -23,25 +23,25 @@ if __name__ == '__main__':
                             }
         try:
             for line in sys.stdin:
-                if match(line):
-                    a, b, c, d, e, f, g, status_code, f_size = line.split()
-                    total_f_size += int(f_size)
+                # if match(line):
+                a, b, c, d, e, f, g, status_code, f_size = line.split()
+                total_f_size += int(f_size)
 
-                    # Convert status_code to an integer
-                    status_code = int(status_code)
+                # Convert status_code to an integer
+                status_code = int(status_code)
 
-                    if status_code in status_codes:
-                        status_code_dict[str(status_code)] += 1
+                if status_code in status_codes:
+                    status_code_dict[str(status_code)] += 1
 
-                    line_count += 1
+                line_count += 1
 
-                    if line_count % 10 == 0:
-                        print(f'File size: {total_f_size}')
-                        for key, val in status_code_dict.items():
-                            if val > 0:
-                                print(f"{key}: {val}")
-                else:
-                    continue
+                if line_count % 10 == 0:
+                    print(f'File size: {total_f_size}')
+                    for key, val in status_code_dict.items():
+                        if val > 0:
+                            print(f"{key}: {val}")
+            # else:
+            #     continue
         except KeyboardInterrupt:
             print(f'File size: {total_f_size}')
             for key, val in status_code_dict.items():
