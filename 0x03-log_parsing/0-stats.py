@@ -2,6 +2,7 @@
 """log parsing"""
 import sys
 import re
+from time import sleep
 
 
 def match(x: str) -> bool:
@@ -43,11 +44,11 @@ def log_parse() -> None:
                 else:
                     raise TypeError(usage)
 
-        except KeyboardInterrupt as err:
+        except KeyboardInterrupt:
             print(f'File size: {total_f_size}')
             for key, val in status_code_dict.items():
                 if val > 0:
-                    print(f"{key}, {val}")
+                    print(f"{key}: {val}")
             exit(1)
 
 
