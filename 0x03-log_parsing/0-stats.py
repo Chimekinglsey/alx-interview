@@ -4,7 +4,8 @@ import sys
 import re
 
 
-def match(x: str):
+def match(x: str) -> bool:
+    """Checks for input match"""
     ip_match = r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - '
     date_match = r'\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}\] '
     stats_match = r'"GET /projects/260 HTTP/1\.1" \d{3} \d+'
@@ -12,7 +13,8 @@ def match(x: str):
     return True if re.match(pattern, x) else False
 
 
-def log_parse():
+def log_parse() -> None:
+    """ A function that reads stdin line by line and computes metrics """
     while True:
         usage = '<IP Address> - [<date>] "GET /projects/260 HTTP/1.1"\
 <status code> <file size>'
