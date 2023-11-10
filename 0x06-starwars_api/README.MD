@@ -1,0 +1,1 @@
+This is a challenge to access the StarWars API and dynamically return names of characters
