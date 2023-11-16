@@ -1,63 +1,55 @@
 #!/usr/bin/node
-/**
- * Starwars API using async/await
- */
 
 const request = require('request');
 
-async function fetchData () {
-  let titleIndex = process.argv[2] - 1;
-  if (titleIndex < 1) {
-    titleIndex = 1;
-  }
+async function fetchCharacterData (link) {
+  return new Promise((resolve, reject) => {
+    request(link, (error, resp, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(JSON.parse(body).name);
+      }
+    });
+  });
+}
 
+async function fetchData (movieId) {
   try {
-    const data = await new Promise((resolve, reject) => {
+    const filmsResponse = await new Promise((resolve, reject) => {
       request('https://swapi-api.alx-tools.com/api/films/', (error, resp, data) => {
         if (error) {
           reject(error);
         } else {
-          resolve(data);
+          resolve(JSON.parse(data));
         }
       });
     });
 
-    const films = JSON.parse(data);
-    const characters = films.results[titleIndex].characters;
+    const characters = filmsResponse.results[movieId - 1]?.characters;
 
     if (!characters) {
-      console.log('No Character found!');
+      console.log('No characters found for the specified movie ID.');
       return;
     }
 
-    const promises = characters.map(async (link) => {
+    for (const link of characters) {
       try {
-        const body = await new Promise((resolve, reject) => {
-          request(link, (error, resp, body) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(body);
-            }
-          });
-        });
-
-        const res = JSON.parse(body);
-        return res.name;
+        const characterName = await fetchCharacterData(link);
+        console.log(characterName);
       } catch (error) {
         console.error('Error fetching character data:', error);
-        return null;
       }
-    });
-
-    const result = await Promise.all(promises);
-
-    result.forEach((xter) => {
-      console.log(xter);
-    });
+    }
   } catch (error) {
     console.error('Error:', error);
   }
 }
 
-fetchData();
+const movieId = process.argv[2];
+
+if (!movieId) {
+  console.log('Please provide a movie ID as a command line argument.');
+} else {
+  fetchData(movieId);
+}
