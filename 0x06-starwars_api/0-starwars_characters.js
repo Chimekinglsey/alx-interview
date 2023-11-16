@@ -1,4 +1,7 @@
 #!/usr/bin/node
+/**
+ * Starwars API using async/await
+ */
 
 const request = require('request');
 
@@ -8,47 +11,46 @@ async function fetchData () {
     titleIndex = 1;
   }
 
-  const result = [];
-
   try {
     const data = await new Promise((resolve, reject) => {
-      request('https://swapi-api.alx-tools.com/api/films/', (error, resp, body) => {
+      request('https://swapi-api.alx-tools.com/api/films/', (error, resp, data) => {
         if (error) {
           reject(error);
         } else {
-          resolve(body);
+          resolve(data);
         }
       });
     });
 
     const films = JSON.parse(data);
-    const { characters } = films.results[titleIndex];
+    const characters = films.results[titleIndex].characters;
 
     if (!characters) {
       console.log('No Character found!');
       return;
     }
 
-    await Promise.all(
-      characters.map(async (link) => {
-        try {
-          const body = await new Promise((resolve, reject) => {
-            request(link, (error, resp, content) => {
-              if (error) {
-                reject(error);
-              } else {
-                resolve(content);
-              }
-            });
+    const promises = characters.map(async (link) => {
+      try {
+        const body = await new Promise((resolve, reject) => {
+          request(link, (error, resp, body) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(body);
+            }
           });
+        });
 
-          const res = JSON.parse(body);
-          result.push(res.name);
-        } catch (error) {
-          console.error('Error fetching character data:', error);
-        }
-      })
-    );
+        const res = JSON.parse(body);
+        return res.name;
+      } catch (error) {
+        console.error('Error fetching character data:', error);
+        return null;
+      }
+    });
+
+    const result = await Promise.all(promises);
 
     result.forEach((xter) => {
       console.log(xter);
@@ -57,4 +59,5 @@ async function fetchData () {
     console.error('Error:', error);
   }
 }
+
 fetchData();
