@@ -1,21 +1,60 @@
 #!/usr/bin/node
 
-const util = require('util');
-const request = util.promisify(require('request'));
-const filmID = process.argv[2];
+const request = require('request');
 
-async function starwarsCharacters (filmId) {
-  const endpoint = 'https://swapi-api.hbtn.io/api/films/' + filmId;
-  let response = await (await request(endpoint)).body;
-  response = JSON.parse(response);
-  const characters = response.characters;
+async function fetchData () {
+  let titleIndex = process.argv[2] - 1;
+  if (titleIndex < 1) {
+    titleIndex = 1;
+  }
 
-  for (let i = 0; i < characters.length; i++) {
-    const urlCharacter = characters[i];
-    let character = await (await request(urlCharacter)).body;
-    character = JSON.parse(character);
-    console.log(character.name);
+  const result = [];
+
+  try {
+    const data = await new Promise((resolve, reject) => {
+      request('https://swapi-api.alx-tools.com/api/films/', (error, resp, body) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(body);
+        }
+      });
+    });
+
+    const films = JSON.parse(data);
+    const { characters } = films.results[titleIndex];
+
+    if (!characters) {
+      console.log('No Character found!');
+      return;
+    }
+
+    await Promise.all(
+      characters.map(async (link) => {
+        try {
+          const body = await new Promise((resolve, reject) => {
+            request(link, (error, resp, content) => {
+              if (error) {
+                reject(error);
+              } else {
+                resolve(content);
+              }
+            });
+          });
+
+          const res = JSON.parse(body);
+          result.push(res.name);
+        } catch (error) {
+          console.error('Error fetching character data:', error);
+        }
+      })
+    );
+
+    result.forEach((xter) => {
+      console.log(xter);
+    });
+  } catch (error) {
+    console.error('Error:', error);
   }
 }
-
-starwarsCharacters(filmID);
+fetchData();
