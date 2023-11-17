@@ -7,13 +7,13 @@ if (title_index < 1) {
 }
 
 const result = [];
-const resp = request('https://swapi-api.alx-tools.com/api/films/', (error, resp, data) => {
+const resp = request('https://swapi-api.alx-tools.com/api/filmsResponse/', (error, resp, data) => {
   if (error) {
     console.log('Error:', error);
     return;
   }
-  const films = JSON.parse(data);
-  const characters = films.results[title_index].characters;
+  const filmsResponse = JSON.parse(data);
+  const characters = filmsResponse.results[title_index].characters;
   if (!characters) {
     console.log('No Character found!');
     return;
@@ -42,9 +42,9 @@ const resp = request('https://swapi-api.alx-tools.com/api/films/', (error, resp,
 // const request = require('request');
 
 // async function fetchData () {
-//   let titleIndex = process.argv[2] - 1;
-//   if (titleIndex < 1) {
-//     titleIndex = 1;
+//   let movieId = process.argv[2] - 1;
+//   if (movieId < 1) {
+//     movieId = 1;
 //   }
 
 //   try {
@@ -58,8 +58,8 @@ const resp = request('https://swapi-api.alx-tools.com/api/films/', (error, resp,
 //       });
 //     });
 
-//     const films = JSON.parse(data);
-//     const characters = films.results[titleIndex].characters;
+//     const filmsResponse = JSON.parse(data);
+//     const characters = filmsResponse.results[movieId].characters;
 
 //     if (!characters) {
 //       console.log('No Character found!');
